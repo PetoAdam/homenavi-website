@@ -1,0 +1,39 @@
+{
+  "name": "homenavi-website",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "test": "vitest run",
+    "test:e2e": "node tests/e2e-responsive.js",
+    "test:qa": "node tests/qa-visual.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PetoAdam/homenavi-website.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/PetoAdam/homenavi-website/issues"
+  },
+  "homepage": "https://github.com/PetoAdam/homenavi-website#readme",
+  "dependencies": {
+    "marked": "^18.1.1",
+    "next": "^16.4.2",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.5",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "playwright": "^1.64.1",
+    "typescript": "^7.0.2",
+    "vitest": "^5.0.5"
+  }
+}
