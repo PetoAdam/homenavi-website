@@ -88,7 +88,7 @@ node scripts/hero-shots.js     # 2K and mobile screenshots for design review (re
 
 ## Delivery
 
-Every pull request and push to `main` runs type checking, unit tests, Playwright responsive and visual QA, the production build, and a Docker image build. Pushing a semantic version tag such as `v1.0.0` publishes the public image to `ghcr.io/petoadam/homenavi-website` with immutable version tags and `latest`.
+Every pull request and push to `main` runs type checking, unit tests, Playwright responsive and visual QA, the production build, and a Docker image build. Pushing a semantic version tag such as `v1.0.0` publishes the image to `ghcr.io/petoadam/homenavi-website` with immutable version tags and `latest`. After the first publication, set the package visibility to **Public** in GitHub Packages so an unauthenticated Kubernetes cluster can pull it without a registry credential.
 
 The Argo CD deployment consumes the immutable full version tag from the
 `homelab-gitops` repository. Release a new deployment by updating that image tag in
