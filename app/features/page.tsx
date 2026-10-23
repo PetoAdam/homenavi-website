@@ -1,4 +1,11 @@
+import type { Metadata } from "next";
 import { PageHeader, GlassCard, ScreenshotFrame } from "../components/ui";
+
+export const metadata: Metadata = {
+  title: "Features",
+  description: "Explore Homenavi's realtime device control, dashboards, maps, automation workflows, and integration runtime.",
+  alternates: { canonical: "/features" },
+};
 
 export default function FeaturesPage() {
   return (
@@ -11,8 +18,8 @@ export default function FeaturesPage() {
       </section>
 
       <section className="section">
-        <div className="grid cols-2">
-          <div className="glass-card">
+        <div className="feature-band">
+          <div>
             <h3 className="card-title">Realtime device control</h3>
             <p className="card-desc">
               Devices connect through the device hub and EMQX broker using the Homenavi Device
@@ -22,12 +29,10 @@ export default function FeaturesPage() {
           </div>
           <ScreenshotFrame src="/screenshots/devices.png" alt="Device inventory view" />
         </div>
-      </section>
 
-      <section className="section">
-        <div className="grid cols-2">
+        <div className="feature-band reverse">
           <ScreenshotFrame src="/screenshots/dashboard.png" alt="Dashboard with resizable widgets" />
-          <div className="glass-card">
+          <div>
             <h3 className="card-title">Visual dashboards</h3>
             <p className="card-desc">
               Build a home overview with widgets for weather, devices, integrations, and maps.
@@ -36,11 +41,9 @@ export default function FeaturesPage() {
             </p>
           </div>
         </div>
-      </section>
 
-      <section className="section">
-        <div className="grid cols-2">
-          <div className="glass-card">
+        <div className="feature-band">
+          <div>
             <h3 className="card-title">Groups and floor maps</h3>
             <p className="card-desc">
               Organize devices into groups and place them on an interactive floor map. Groups let
@@ -49,12 +52,10 @@ export default function FeaturesPage() {
           </div>
           <ScreenshotFrame src="/screenshots/map.png" alt="Floor map editor with device placement" />
         </div>
-      </section>
 
-      <section className="section">
-        <div className="grid cols-2">
-          <ScreenshotFrame src="/screenshots/auotmation.png" alt="Automation workflow editor" />
-          <div className="glass-card">
+        <div className="feature-band reverse">
+          <ScreenshotFrame src="/screenshots/automation-edit.png" alt="Automation workflow editor" />
+          <div>
             <h3 className="card-title">Automation workflows</h3>
             <p className="card-desc">
               The automation service chains triggers and actions into workflows. Sensor events,
@@ -63,11 +64,9 @@ export default function FeaturesPage() {
             </p>
           </div>
         </div>
-      </section>
 
-      <section className="section">
-        <div className="grid cols-2">
-          <div className="glass-card">
+        <div className="feature-band">
+          <div>
             <h3 className="card-title">Integration runtime</h3>
             <p className="card-desc">
               Integrations run as containerized services behind the integration proxy. They declare
@@ -87,6 +86,16 @@ export default function FeaturesPage() {
             stays yours: no cloud dependency is required for the core platform.
           </p>
         </div>
+      </section>
+
+      <section className="section feature-architecture-cta">
+        <p className="eyebrow">For technical readers</p>
+        <h2>Want to know more?</h2>
+        <p>
+          Follow the data paths, service boundaries, device protocol, integration runtime, and
+          deployment choices behind these capabilities.
+        </p>
+        <a className="btn secondary" href="/architecture">Explore the architecture</a>
       </section>
     </>
   );

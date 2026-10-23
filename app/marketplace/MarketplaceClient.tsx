@@ -1,7 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { Integration, capabilities } from "../../lib/integrations";
+import { Integration, capabilities, formatVersion } from "../../lib/integrations";
+
+type Filter = "all" | "verified" | "featured" | "trending";
+type Sort = "name" | "updated" | "downloads";
 
 export default function MarketplaceClient({
   integrations,
@@ -11,15 +14,31 @@ export default function MarketplaceClient({
   source: "live" | "cache";
 }) {
   const [query, setQuery] = useState("");
-  const [filter, setFilter] = useState<"all" | "verified" | "featured" | "trending">("all");
+  const [filter, setFilter] = useState<Filter>("all");
+  const [sort, setSort] = useState<Sort>("updated");
 
-  const filtered = integrations.filter((i) => {
-    if (filter === "verified" && !i.verified) return false;
-    if (filter === "featured" && !i.featured) return false;
-    if (filter === "trending" && i.trending_score <= 0) return false;
-    const q = query.toLowerCase();
-    return !q || i.name.toLowerCase().includes(q) || i.description.toLowerCase().includes(q);
-  });
+  const counts: Record<Filter, number> = {
+    all: integrations.length,
+    verified: integrations.filter((i) => i.verified).length,
+    featured: integrations.filter((i) => i.featured).length,
+    trending: integrations.filter((i) => i.trending_score > 0).length,
+  };
+
+  const filtered = integrations
+    .filter((i) => {
+      if (filter === "verified" && !i.verified) return false;
+      if (filter === "featured" && !i.featured) return false;
+      if (filter === "trending" && i.trending_score <= 0) return false;
+      const q = query.toLowerCase();
+      return !q || i.name.toLowerCase().includes(q) || i.description.toLowerCase().includes(q);
+    })
+    .sort((a, b) => {
+      if (sort === "name") return a.name.localeCompare(b.name);
+      if (sort === "downloads") return b.downloads - a.downloads;
+      const bDate = b.updated_at || b.created_at || "";
+      const aDate = a.updated_at || a.created_at || "";
+      return bDate < aDate ? -1 : 1;
+    });
 
   return (
     <div>
@@ -40,10 +59,18 @@ export default function MarketplaceClient({
               className={`filter-pill${filter === f ? " active" : ""}`}
               onClick={() => setFilter(f)}
             >
-              {f}
+              {f} <span className="filter-count">{counts[f]}</span>
             </button>
           ))}
         </div>
+        <label className="marketplace-sort">
+          <span>Sort</span>
+          <select value={sort} onChange={(e) => setSort(e.target.value as Sort)} aria-label="Sort integrations">
+            <option value="updated">Recently updated</option>
+            <option value="name">Name</option>
+            <option value="downloads">Downloads</option>
+          </select>
+        </label>
       </div>
 
       <p className="marketplace-source">
@@ -56,17 +83,21 @@ export default function MarketplaceClient({
           <a key={i.id} className="integration-card" href={`/marketplace/${i.id}`}>
             <div className="integration-card-head">
               <h3>{i.name}</h3>
-              <span className="pill neutral">v{i.version}</span>
+              <div className="integration-badges">
+                {i.verified && <span className="pill success">Verified</span>}
+                {i.featured && <span className="pill primary">Featured</span>}
+                {i.trending_score > 0 && <span className="pill warning">Trending</span>}
+              </div>
             </div>
             <p className="card-desc">{i.description}</p>
-            <p className="integration-publisher">{i.publisher}</p>
-            <div className="integration-badges">
-              {i.verified && <span className="pill success">Verified</span>}
-              {i.featured && <span className="pill primary">Featured</span>}
-              {i.trending_score > 0 && <span className="pill warning">Trending</span>}
-              {capabilities(i).slice(0, 3).map((c) => (
-                <span key={c} className="pill">{c}</span>
-              ))}
+            <div className="integration-meta">
+              <span>{i.publisher}</span>
+              <span>{formatVersion(i.version)}</span>
+              <div className="caps">
+                {capabilities(i).slice(0, 3).map((c) => (
+                  <span key={c}>{c}</span>
+                ))}
+              </div>
             </div>
           </a>
         ))}

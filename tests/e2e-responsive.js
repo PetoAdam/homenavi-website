@@ -118,6 +118,27 @@ async function main() {
       assert(n >= 2, `home value grid uses multiple columns on desktop (${n})`);
     }
 
+    const helmTab = await desktop.$('.deployment-tab-list button[role="tab"]:has-text("Helm")');
+    assert(helmTab, "home has a Helm deployment tab");
+    if (helmTab) {
+      await helmTab.click();
+      const helmSelected = await helmTab.getAttribute("aria-selected");
+      const helmCommand = await desktop.$eval(".deployment-tabs .terminal-body", (el) => el.textContent || "");
+      assert(helmSelected === "true", "Helm deployment tab becomes selected");
+      assert(helmCommand.includes("helm upgrade --install"), "Helm tab displays the Helm installation command");
+    }
+
+    const exploreLinks = await desktop.$$eval(".explore-platform a", (links) => links.map((link) => link.getAttribute("href")));
+    assert(
+      ["/demo", "/guides/mcp", "/features", "/marketplace", "/integrations", "/architecture", "/guides"].every((href) => exploreLinks.includes(href)),
+      "home discovery section links to demo, MCP, and product pages"
+    );
+
+    const rosterRows = await desktop.$$(".roster-row");
+    assert(rosterRows.length > 0 && rosterRows.length <= 5, `home integration roster is capped at five entries (${rosterRows.length})`);
+    const allIntegrationsLink = await desktop.$('.roster > a[href="/integrations"]');
+    assert(allIntegrationsLink, "home integration roster links to the full integrations directory");
+
     // Marketplace search/filter interactivity
     await desktop.goto(BASE + "/marketplace", { waitUntil: "networkidle" });
     const search = await desktop.$(".search-input");

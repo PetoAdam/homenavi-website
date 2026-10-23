@@ -4,12 +4,17 @@ export default function Footer() {
       <div className="container footer-inner">
         <div className="footer-col">
           <h4>Homenavi</h4>
-          <p className="footer-tag">Open smart-home platform with a microservice core, MQTT/HDP realtime plane, and integration-first extensibility.</p>
+          <p className="footer-tagline">
+            Built by people who think a smart home should answer to its owner, not
+            to a subscription. Run it on your own box, wire it to whatever you own,
+            and keep the data where it belongs.
+          </p>
         </div>
         <div className="footer-col">
           <h4>Product</h4>
           <ul>
             <li><a href="/features">Features</a></li>
+            <li><a href="/architecture">Architecture</a></li>
             <li><a href="/demo">Live demo</a></li>
             <li><a href="/marketplace">Marketplace</a></li>
             <li><a href="/integrations">Integrations</a></li>
@@ -21,6 +26,7 @@ export default function Footer() {
             <li><a href="/guides/quickstart">Quickstart</a></li>
             <li><a href="/guides/self-hosting">Self-hosting</a></li>
             <li><a href="/guides/automations">Automations</a></li>
+            <li><a href="/guides/mcp">MCP</a></li>
             <li><a href="/guides/troubleshooting">Troubleshooting</a></li>
           </ul>
         </div>

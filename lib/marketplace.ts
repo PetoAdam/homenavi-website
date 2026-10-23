@@ -3,7 +3,7 @@ import path from "node:path";
 import { Integration, normalize } from "./integrations";
 
 export type { Integration } from "./integrations";
-export { normalize, capabilities } from "./integrations";
+export { normalize, capabilities, formatVersion } from "./integrations";
 
 export interface MarketplaceResult {
   integrations: Integration[];

@@ -1,0 +1,34 @@
+name: Verify website
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    name: Test and build
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci --no-audit --no-fund
+      - run: npx playwright install --with-deps chromium
+      - run: npm run test:ci
+      - name: Build container image
+        run: docker build --tag homenavi-website:ci .
+      - name: Verify container serves the site
+        run: |
+          docker run --detach --rm --name homenavi-website-ci --publish 8080:80 homenavi-website:ci
+          for attempt in {1..10}; do curl --fail --silent --show-error http://127.0.0.1:8080/ && break; sleep 1; done
+          curl --fail --silent --show-error http://127.0.0.1:8080/architecture
+          docker stop homenavi-website-ci

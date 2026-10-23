@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { normalize, capabilities, Integration } from "../lib/marketplace";
-import { loadGuide, listGuides, GUIDE_SLUGS } from "../lib/guides";
+import { loadGuide, listGuides, GUIDE_SLUGS, renderGuideMarkdown } from "../lib/guides";
 import { DEMO_URL } from "../lib/demo";
 
 describe("marketplace normalize", () => {
@@ -87,12 +87,13 @@ describe("capabilities", () => {
 });
 
 describe("guides", () => {
-  it("exposes the five planned guide slugs", () => {
+  it("exposes the planned guide slugs", () => {
     expect([...GUIDE_SLUGS]).toEqual([
       "quickstart",
       "self-hosting",
       "integration-setup",
       "automations",
+      "mcp",
       "troubleshooting",
     ]);
   });
@@ -114,6 +115,12 @@ describe("guides", () => {
     const list = listGuides();
     expect(list).toHaveLength(GUIDE_SLUGS.length);
     expect(list.every((g) => g.title.length > 0)).toBe(true);
+  });
+
+  it("strips raw HTML before guide content reaches the page", () => {
+    const rendered = renderGuideMarkdown("# Safe guide\n\n<script>alert('xss')</script>\n\n## Overview");
+    expect(rendered.html).not.toContain("<script");
+    expect(rendered.sections).toEqual([{ text: "Overview", id: "overview" }]);
   });
 });
 

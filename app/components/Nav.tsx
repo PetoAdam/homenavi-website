@@ -3,6 +3,7 @@ import NavClient from "./NavClient";
 const links = [
   { href: "/features", label: "Features" },
   { href: "/integrations", label: "Integrations" },
+  { href: "/architecture", label: "Architecture" },
   { href: "/marketplace", label: "Marketplace" },
   { href: "/guides", label: "Guides" },
   { href: "/community", label: "Community" },
@@ -14,7 +15,6 @@ export default function Nav() {
     <header className="site-nav">
       <div className="container nav-inner">
         <a className="brand" href="/">
-          <span className="brand-mark" aria-hidden="true">H</span>
           <span className="brand-name">Homenavi</span>
         </a>
         <NavClient links={links} />

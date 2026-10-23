@@ -1,0 +1,9 @@
+services:
+  website:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: homenavi-website:latest
+    ports:
+      - "4000:80"
+    restart: unless-stopped

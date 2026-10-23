@@ -6,9 +6,11 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
+    "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "test:e2e": "node tests/e2e-responsive.js",
-    "test:qa": "node tests/qa-visual.js"
+    "test:qa": "node tests/qa-visual.js",
+    "test:ci": "npm run typecheck && npm test && npm run build && npm run test:e2e && npm run test:qa"
   },
   "repository": {
     "type": "git",

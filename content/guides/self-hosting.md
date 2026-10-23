@@ -12,11 +12,18 @@ docker compose pull
 docker compose up -d
 ```
 
+To explore the platform without hardware, start the opt-in mock adapter profile, which publishes a simulated device tree over MQTT:
+
+```sh
+docker compose up -d --profile mock-adapter
+```
+
 Notes:
 
 - Compose pulls prebuilt release images from GitHub Container Registry. Use `docker compose up --build` only when developing from source.
 - The stack defaults to EMQX as the MQTT backbone.
 - Nginx handles HTTPS/WSS ingress; dev modes are documented in the nginx guide.
+- Nginx is the ingress, so once the edge services are up the platform is reachable at `http://localhost`.
 
 ## Kubernetes (Helm)
 

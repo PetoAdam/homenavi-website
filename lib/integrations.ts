@@ -60,6 +60,14 @@ export function normalize(raw: unknown): Integration[] {
     }));
 }
 
+// Some marketplace feeds return versions already prefixed with "v" (e.g. "v0.1.5"),
+// others return bare semver ("1.4.2"). Normalize so renderers never emit "vv1.0.0".
+export function formatVersion(version: string): string {
+  const v = String(version ?? "").trim();
+  if (!v) return "";
+  return v.startsWith("v") || v.startsWith("V") ? v : `v${v}`;
+}
+
 export function capabilities(i: Integration): string[] {
   const caps: string[] = [];
   if (i.manifest?.device_extension) caps.push("Device support");

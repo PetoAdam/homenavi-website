@@ -1,0 +1,17 @@
+node_modules
+.next
+out
+dist
+.cache
+coverage
+test-results
+playwright-report
+qa-screenshots
+.git
+.gitignore
+.env
+.env.local
+*.log
+npm-debug.log
+README.md
+website-product-plan.md

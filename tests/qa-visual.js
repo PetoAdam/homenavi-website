@@ -76,7 +76,24 @@ async function main() {
     });
     assert(tokens.bg === "#242e3a", `design token --color-bg is #242e3a (got ${tokens.bg})`);
     assert(tokens.primary === "#39aa79", `design token --color-primary is #39aa79 (got ${tokens.primary})`);
-    assert(tokens.container === "1120px", `container width token present (${tokens.container})`);
+    assert(tokens.container === "1280px", `container width token present (${tokens.container})`);
+
+    const iconLinks = await page.$$eval("link[rel]", (links) =>
+      links.map((link) => ({ rel: link.getAttribute("rel"), href: link.getAttribute("href") }))
+    );
+    assert(iconLinks.some((link) => link.rel === "manifest" && link.href?.endsWith("/manifest.webmanifest")), "home declares an install manifest");
+    assert(iconLinks.some((link) => link.rel === "apple-touch-icon" && link.href?.endsWith("/icons/apple-touch-icon.png")), "home declares an iOS touch icon");
+    assert(iconLinks.some((link) => link.rel?.includes("icon") && link.href?.endsWith("/favicon.ico")), "home declares a desktop favicon");
+
+    const manifest = await page.evaluate(async () => {
+      const response = await fetch("/manifest.webmanifest");
+      return response.ok ? response.json() : null;
+    });
+    assert(manifest?.name === "Homenavi" && manifest?.display === "standalone", "install manifest uses the Homenavi app identity");
+    assert(
+      manifest?.icons?.some((icon) => icon.sizes === "192x192") && manifest?.icons?.some((icon) => icon.sizes === "512x512"),
+      "install manifest includes Android 192px and 512px icons"
+    );
 
     // Hero heading hierarchy
     const h1 = await page.$("main h1");
