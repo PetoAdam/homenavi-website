@@ -10,43 +10,116 @@ export const metadata: Metadata = {
   alternates: { canonical: "/" },
 };
 
-const WALKTHROUGH = [
+type WalkthroughFrame = "mcp" | "security" | "deployment";
+
+type WalkthroughStep = {
+  group: string;
+  route: string;
+  title: string;
+  description: string;
+  image?: string;
+  alt?: string;
+  href: string;
+  linkLabel: string;
+  visual?: WalkthroughFrame;
+  roadmap?: string;
+  reverse?: boolean;
+};
+
+const WALKTHROUGH: WalkthroughStep[] = [
   {
-    route: "DEVICE → ROOM → DASHBOARD",
-    title: "Pair a device, place it in a room, put it on a dashboard.",
-    description: "Pairing runs through the device hub: commissioning, capability negotiation, and a room hint. The dashboard picks the device up immediately, with live state and manual controls.",
+    group: "Configure",
+    route: "DASHBOARD → YOUR WORKSPACE",
+    title: "Build the dashboard you want to live with.",
+    description: "Each person in the household can build a dashboard for their own routines. Resize and rearrange its widgets, then combine core controls with widgets contributed by your integrations.",
+    image: "/screenshots/dashboard.png",
+    alt: "Homenavi dashboard showing customizable widgets and live home state",
+    href: "/features",
+    linkLabel: "Explore dashboards",
+  },
+  {
+    group: "Configure",
+    route: "PAIR → ORGANIZE → CONTROL",
+    title: "Pair once, find every device the same way.",
+    description: "The Device Hub brings supported integrations into one device inventory. Assign rooms, tags, and groups so a device can be found by place, purpose, or collection.",
     image: "/screenshots/devices.png",
-    alt: "Device list with live state in the Homenavi app",
+    alt: "Homenavi device inventory with device state",
+    href: "/guides/integration-setup",
+    linkLabel: "Read integration setup",
+    reverse: true,
   },
   {
-    route: "DASHBOARD → SPATIAL STATE",
-    title: "Investigate state in the rooms where it matters.",
-    description: "The map is the spatial view for understanding the home at a glance: rooms, devices, and their current state remain tied to the places they affect.",
+    group: "Configure",
+    route: "MAP → ROOM → DEVICE LIST",
+    title: "See the home as a place, not a pile of devices.",
+    description: "Place devices on an interactive floor map, inspect room-level state, and move from spatial context into the room-filtered device inventory without losing your place.",
     image: "/screenshots/map.png",
-    alt: "Homenavi map showing spatial device state",
-    reverse: true,
+    alt: "Homenavi floor map showing rooms and device state",
+    href: "/features",
+    linkLabel: "Explore maps and rooms",
   },
   {
-    route: "GROUP OR TAG → AUTOMATION",
-    title: "Target an automation by group, tag, room, or device.",
-    description: "Groups are explicit device collections; tags are labels; rooms describe location. Each is independently selectable, so rules can follow how your home is organized.",
-    image: "/screenshots/groups.png",
-    alt: "Device groups and rooms in the Homenavi app",
-  },
-  {
-    route: "CONDITION → ACTION → RESULT",
-    title: "Every step reports back.",
-    description: "Commands carry correlation IDs and acknowledgements, so a workflow can branch on whether a light actually changed, not just whether a command was sent.",
+    group: "Operate",
+    route: "TRIGGER → CONDITIONS → ACTIONS",
+    title: "Build automations with consequences.",
+    description: "Compose triggers, conditions, branches, and actions around real device and integration events. Commands retain correlation and acknowledgement data, so workflows can react to outcomes rather than just send requests.",
     image: "/screenshots/automation-edit.png",
-    alt: "Automation editor with condition and action steps",
+    alt: "Homenavi automation editor with workflow steps",
+    href: "/guides/automations",
+    linkLabel: "Read automation guide",
     reverse: true,
   },
   {
-    route: "INTEGRATION → MARKETPLACE",
-    title: "Install a brand, get its devices.",
-    description: "Integrations declare their capabilities in a manifest and run as their own service. Installing one adds devices, widgets, or workflows without changing the core platform.",
+    group: "Operate",
+    route: "INTEGRATION → HOMENAVI UI",
+    title: "Extend the platform without forking its experience.",
+    description: "Integrations run as independently deployed services and declare their capabilities in a manifest. Devices, setup surfaces, widgets, and automation steps appear as part of the same Homenavi system.",
     image: "/screenshots/integrations-marketplace.png",
-    alt: "Homenavi marketplace listing installable integrations",
+    alt: "Homenavi marketplace listing available integrations",
+    href: "/integrations",
+    linkLabel: "Explore integrations",
+    roadmap: "Integration MCP support",
+  },
+  {
+    group: "Extend",
+    route: "MCP → SCOPED TOOLS → ASSISTANTS",
+    title: "Bring an assistant to a system you still control.",
+    description: "Model Context Protocol gives compatible assistants scoped tools for Homenavi inventory, history, device and group control, and workflow runs. OAuth 2.1 and PKCE keep the assistant outside your core deployment boundary.",
+    href: "/guides/mcp",
+    linkLabel: "Read the MCP guide",
+    visual: "mcp",
+    roadmap: "DIY voice assistant in development",
+    reverse: true,
+  },
+  {
+    group: "Extend",
+    route: "AUTHENTICATE → AUTHORIZE → OPERATE",
+    title: "Keep control boundaries explicit.",
+    description: "Authentication, session validation, and role-based access control sit at the edge before protected services receive a request. Device control stays tied to a real identity and explicit permissions.",
+    href: "/architecture",
+    linkLabel: "Inspect the architecture",
+    visual: "security",
+  },
+  {
+    group: "Extend",
+    route: "COMPOSE → HELM → HA PROFILE",
+    title: "Deploy for the home you run.",
+    description: "Start with Docker Compose for a local or small instance, or use Helm and the HA profile when Kubernetes fits your operating model. ARM64 support makes capable Pi-class homelab hardware a documented option.",
+    href: "/guides/self-hosting",
+    linkLabel: "Compare deployment paths",
+    visual: "deployment",
+    reverse: true,
+  },
+  {
+    group: "Extend",
+    route: "PWA → RESPONSIVE CONTROL → ROADMAP",
+    title: "Use the control plane wherever you are.",
+    description: "Homenavi is already a mobile-friendly PWA that you can install from a supported browser. A native mobile app and Matter support are planned additions to that same home model.",
+    image: "/screenshots/dashboard.png",
+    alt: "Homenavi dashboard shown in the web application",
+    href: "/features",
+    linkLabel: "Explore the platform",
+    roadmap: "Native mobile app and Matter support",
   },
 ];
 
@@ -78,17 +151,24 @@ export default async function HomePage() {
         </figure>
       </section>
 
-      <section className="section walkthrough reveal" aria-label="How Homenavi connects devices, spaces, automations, and integrations">
+      <section className="section walkthrough reveal" aria-labelledby="walkthrough-title">
+        <header className="walkthrough-heading">
+          <p className="eyebrow">Product walkthrough</p>
+          <h2 id="walkthrough-title">One system for devices, people, and automation.</h2>
+          <p>From the first paired device to daily control, assistants, and deployment, Homenavi keeps the home connected without losing your control of it.</p>
+        </header>
         {WALKTHROUGH.map((step, index) => (
-          <article className={`walk-row${step.reverse ? " reverse" : ""}`} data-reveal key={step.route}>
+          <article id={`walk-${index + 1}`} className={`walk-row${step.reverse ? " reverse" : ""}`} data-reveal key={step.route}>
             <span className="walk-index" aria-hidden="true">{String(index + 1).padStart(2, "0")}</span>
             <div className="walk-text" data-reveal-part>
               <p className="walk-route">{step.route}</p>
               <h3>{step.title}</h3>
               <p>{step.description}</p>
+              {step.roadmap ? <span className="walk-roadmap">On the roadmap: {step.roadmap}</span> : null}
+              <a className="walk-link" href={step.href}>{step.linkLabel}</a>
             </div>
             <div className="walk-media" data-reveal-part>
-              <ScreenshotFrame src={step.image} alt={step.alt} />
+              {step.image ? <ScreenshotFrame src={step.image} alt={step.alt ?? ""} /> : <WalkthroughSystemFrame type={step.visual} />}
             </div>
           </article>
         ))}
@@ -127,5 +207,25 @@ export default async function HomePage() {
         <a className="btn primary" href="/integrations">Explore all integrations</a>
       </section>
     </>
+  );
+}
+
+function WalkthroughSystemFrame({ type }: { type?: "mcp" | "security" | "deployment" }) {
+  const frames = {
+    mcp: ["MCP client", "OAuth 2.1 + PKCE", "Scoped Homenavi tools"],
+    security: ["Identity", "API Gateway", "Protected services"],
+    deployment: ["Docker Compose", "Helm", "HA profile"],
+  };
+  const labels = frames[type ?? "mcp"];
+
+  return (
+    <div className={`walk-system-frame ${type ?? "mcp"}`} aria-label={labels.join(" to ")}>
+      {labels.map((label, index) => (
+        <div key={label}>
+          <span>{String(index + 1).padStart(2, "0")}</span>
+          <strong>{label}</strong>
+        </div>
+      ))}
+    </div>
   );
 }

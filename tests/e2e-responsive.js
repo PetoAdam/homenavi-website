@@ -139,6 +139,25 @@ async function main() {
     const allIntegrationsLink = await desktop.$('.roster > a[href="/integrations"]');
     assert(allIntegrationsLink, "home integration roster links to the full integrations directory");
 
+    const walkthroughRows = await desktop.$$(".walk-row");
+    assert(walkthroughRows.length === 9, `home has nine walkthrough chapters (${walkthroughRows.length})`);
+    const walkthroughIndex = await desktop.$(".walkthrough-index");
+    assert(!walkthroughIndex, "home walkthrough omits a redundant chapter index");
+    const roadmapLabels = await desktop.$$(".walk-roadmap");
+    assert(roadmapLabels.length === 3, `home labels three future capabilities as roadmap work (${roadmapLabels.length})`);
+    const walkthroughLinks = await desktop.$$eval(".walk-row .walk-link", (links) => links.map((link) => link.getAttribute("href")));
+    assert(
+      ["/features", "/guides/integration-setup", "/guides/automations", "/integrations", "/guides/mcp", "/architecture", "/guides/self-hosting"].every((href) => walkthroughLinks.includes(href)),
+      "walkthrough chapters lead to the relevant product documentation"
+    );
+
+    await desktop.goto(BASE + "/features", { waitUntil: "networkidle" });
+    const featureItems = await desktop.$$(".feature-band, .feature-operating-list article");
+    assert(
+      featureItems.length >= walkthroughRows.length,
+      `features catalogue covers at least the walkthrough scope (${featureItems.length} items)`
+    );
+
     // Marketplace search/filter interactivity
     await desktop.goto(BASE + "/marketplace", { waitUntil: "networkidle" });
     const search = await desktop.$(".search-input");
