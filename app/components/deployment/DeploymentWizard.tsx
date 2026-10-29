@@ -180,5 +180,3 @@ function Recommendation({ answers, onEdit }: { answers: DeploymentAnswers; onEdi
 function Detail({ title, items }: { title: string; items: string[] }) {
   return <section><h4>{title}</h4><ul>{items.map((item) => <li key={item}>{item}</li>)}</ul></section>;
 }
-
-\n
