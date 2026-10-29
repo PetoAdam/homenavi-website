@@ -2,6 +2,8 @@
 
 Homenavi is designed to run on your own infrastructure. There are two supported deployment paths: Docker Compose for local and small instances, and Helm for Kubernetes clusters.
 
+Use the [deployment guide](/deploy) first when you need help choosing a hosting boundary, reusing existing hardware, or understanding protocol and voice limitations. It recommends only the paths supported by the current project.
+
 ## Docker Compose (canonical path)
 
 ```sh

@@ -131,7 +131,7 @@ docker compose up -d --profile mock-adapter`}
           </p>
           <div className="hero-cta">
             <a className="btn primary" href="/guides/quickstart">Quickstart guide</a>
-            <a className="btn secondary" href="/guides/self-hosting">Self-hosting guide</a>
+            <a className="btn secondary" href="/deploy">Plan your deployment</a>
           </div>
         </div>
       </section>

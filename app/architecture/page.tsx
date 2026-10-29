@@ -1,5 +1,6 @@
 import { Metadata } from "next";
 import { PageHeader } from "../components/ui";
+import ArchitectureFlow from "../components/ArchitectureFlow";
 
 export const metadata: Metadata = {
   title: "Architecture",
@@ -41,7 +42,7 @@ export default function ArchitecturePage() {
             the right fit; its HA profile scales selected stateless services, uses shared MQTT
             consumer groups, and supports CNPG PostgreSQL and Redis Sentinel.
           </p>
-          <a className="btn secondary" href="/guides/self-hosting">Read self-hosting options</a>
+          <a className="btn secondary" href="/deploy">Plan your deployment</a>
         </div>
         <div className="architecture-deployment-panel" aria-label="Homenavi deployment paths">
           <div><span>01</span><strong>Compose</strong><p>Local and small instances</p></div>
@@ -74,37 +75,6 @@ export default function ArchitecturePage() {
         </div>
       </section>
 
-      <section className="section architecture-system reveal" aria-labelledby="runtime-title">
-        <div className="architecture-heading">
-          <p className="eyebrow">Runtime topology</p>
-          <h2 id="runtime-title">One public edge, a realtime backbone, and explicit service boundaries.</h2>
-          <p>Every browser request enters through Nginx and the API Gateway. Realtime device traffic travels independently through EMQX using HDP, so services can react without sharing databases.</p>
-        </div>
-        <div className="architecture-system-map" aria-label="Homenavi runtime system map">
-          <div className="architecture-system-column">
-            <p>CLIENTS</p>
-            <div className="architecture-system-node"><strong>Browser dashboard</strong><span>HTTPS and WSS</span></div>
-            <div className="architecture-system-node"><strong>MCP client</strong><span>Scoped HTTP tools</span></div>
-          </div>
-          <div className="architecture-system-link"><span>HTTPS · WSS</span></div>
-          <div className="architecture-system-core">
-            <div className="architecture-system-node core"><strong>Nginx + API Gateway</strong><span>Public entry, authentication, routing, WebSocket proxy</span></div>
-            <div className="architecture-system-services">
-              <div className="architecture-system-node"><strong>Auth Service + Entity Registry Service</strong><span>Sessions, users, rooms, tags, groups</span></div>
-              <div className="architecture-system-node"><strong>Device Hub + Automation Service</strong><span>HDP state, command lifecycle, workflows</span></div>
-              <div className="architecture-system-node"><strong>Dashboard Service + History Service</strong><span>Widgets, queries, durable state record</span></div>
-            </div>
-            <div className="architecture-event-bus"><span>EMQX</span><strong>HDP realtime event backbone</strong><em>state · commands · lifecycle</em></div>
-          </div>
-          <div className="architecture-system-link reverse"><span>MQTT · HDP</span></div>
-          <div className="architecture-system-column">
-            <p>RUNTIME</p>
-            <div className="architecture-system-node"><strong>Adapters + Physical Devices</strong><span>Zigbee, vendor clouds, local hardware</span></div>
-            <div className="architecture-system-node"><strong>Integration Proxy + Extensions</strong><span>Manifests, extension containers, vendor APIs</span></div>
-          </div>
-        </div>
-      </section>
-
       <section className="section architecture-state-flow reveal" aria-labelledby="state-title">
         <div className="architecture-heading">
           <p className="eyebrow">Realtime state path</p>
@@ -115,17 +85,30 @@ export default function ArchitecturePage() {
             event instead of polling a vendor-specific device API.
           </p>
         </div>
-        <div className="architecture-state-track" aria-label="Physical device event sequence">
-          <div className="architecture-state-node"><span>01</span><strong>Physical Device</strong><em>A light, sensor, switch, or integration device changes state.</em></div>
-          <div className="architecture-state-arrow"><span>vendor event</span></div>
-          <div className="architecture-state-node"><span>02</span><strong>Adapter</strong><em>Maps the vendor event to a protocol-neutral HDP message.</em></div>
-          <div className="architecture-state-arrow"><span>HDP publish</span></div>
-          <div className="architecture-state-node emphasis"><span>03</span><strong>EMQX</strong><em>Routes the shared HDP state event to every subscribed service.</em></div>
-          <div className="architecture-state-arrow"><span>state stream</span></div>
-          <div className="architecture-state-node"><span>04</span><strong>Device Hub</strong><em>Projects current state and records command lifecycle outcomes.</em></div>
-          <div className="architecture-state-arrow"><span>WSS / API</span></div>
-          <div className="architecture-state-node"><span>05</span><strong>Live Surfaces</strong><em>Dashboard, History Service, and Automation Service react from the same event.</em></div>
+        <ArchitectureFlow kind="state" />
+      </section>
+
+      <section className="section architecture-microservices reveal" aria-labelledby="microservices-title">
+        <div>
+          <p className="eyebrow">Go microservices</p>
+          <h2 id="microservices-title">A platform that can evolve without a monolithic knot.</h2>
+          <p>Focused Go services own the parts of the platform they operate. HDP events carry state changes across service boundaries, so independently operated workloads do not need to share a runtime database.</p>
         </div>
+        <dl>
+          <div><dt>Focused ownership</dt><dd>Identity, home inventory, device control, dashboards, automation, and history have clear responsibilities.</dd></div>
+          <div><dt>Realtime contracts</dt><dd>EMQX and HDP let services react to the same event while preserving their own data models.</dd></div>
+          <div><dt>Practical operations</dt><dd>Compose starts small; Helm can scale selected stateless services when Kubernetes is already the right fit.</dd></div>
+        </dl>
+      </section>
+
+      <section className="section architecture-system reveal" aria-labelledby="runtime-title">
+        <div className="architecture-heading">
+          <p className="eyebrow">Detailed service topology</p>
+          <h2 id="runtime-title">The platform, mapped by responsibility and transport.</h2>
+          <p className="architecture-desktop-note">Client traffic enters the Core plane through Nginx and the API Gateway. This desktop map is still a simplified view, focused on how the core feature set works across the main service and transport boundaries.</p>
+          <p className="architecture-mobile-note">On mobile, the diagram intentionally collapses to a plane-level view so the transport boundaries remain readable.</p>
+        </div>
+        <ArchitectureFlow kind="runtime" />
       </section>
 
       <section className="section architecture-ownership reveal" aria-labelledby="ownership-title">

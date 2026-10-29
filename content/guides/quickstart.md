@@ -47,6 +47,7 @@ Once the edge services are running, open `http://localhost` in your browser and 
 
 ## Next steps
 
+- [Deployment guide](/deploy) to choose between local, hybrid, cloud-first, and Kubernetes-oriented paths before expanding the installation.
 - [Self-hosting guide](/guides/self-hosting) for production and Kubernetes deployment.
 - [Automations guide](/guides/automations) to build your first workflow.
 - [Integrations](/integrations) to extend Homenavi with device and service connectors.

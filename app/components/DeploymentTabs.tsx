@@ -18,13 +18,13 @@ const options = {
     label: "Compose",
     code: COMPOSE,
     note: "The canonical path for local and small instances. Add the opt-in mock-adapter profile to explore without hardware.",
-    href: "/guides/quickstart",
+    href: "/deploy",
   },
   helm: {
     label: "Helm",
     code: HELM,
     note: "The Kubernetes path for core services, persistent storage, and configured HA operations.",
-    href: "/guides/self-hosting",
+    href: "/deploy",
   },
 } as const;
 
@@ -60,7 +60,7 @@ export default function DeploymentTabs() {
       </div>
       <div className="deployment-tab-note">
         <p>{option.note}</p>
-        <a className="btn secondary" href={option.href}>Read {option.label} guide</a>
+        <a className="btn secondary" href={option.href}>Plan this deployment</a>
       </div>
     </div>
   );

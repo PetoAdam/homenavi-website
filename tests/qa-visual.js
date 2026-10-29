@@ -106,7 +106,7 @@ async function main() {
     }
 
     // No broken images anywhere on key pages
-    const keyPages = ["/", "/features", "/marketplace", "/demo", "/guides", "/integrations", "/about", "/community", "/changelog"];
+    const keyPages = ["/", "/features", "/marketplace", "/demo", "/deploy", "/guides", "/integrations", "/about", "/community", "/changelog"];
     for (const p of keyPages) {
       await page.goto(BASE + p, { waitUntil: "networkidle" });
       const broken = await page.evaluate(() =>
@@ -123,6 +123,11 @@ async function main() {
       assert(hasH1, `guide ${slug}: renders an h1 heading`);
       assert(hasCode, `guide ${slug}: renders code blocks/inline code`);
     }
+    await page.goto(BASE + "/guides/deployment", { waitUntil: "networkidle" });
+    const deploymentGuideHeading = await page.$(".guide-content h1");
+    const deploymentPlannerLink = await page.$('.guide-content a[href="/deploy"]');
+    assert(deploymentGuideHeading, "deployment guide renders an h1 heading");
+    assert(deploymentPlannerLink, "deployment guide links to the interactive planner");
 
     // Marketplace detail pages render
     await page.goto(BASE + "/marketplace", { waitUntil: "networkidle" });

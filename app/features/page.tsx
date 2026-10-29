@@ -1,6 +1,17 @@
 import type { Metadata } from "next";
 import { PageHeader, ScreenshotFrame } from "../components/ui";
 
+const OPERATING_MODEL_ITEMS = [
+  ["01", "MCP, scoped by design", "Connect compatible assistants with OAuth 2.1 and PKCE-scoped tools for inventory, history, device control, groups, and workflow runs. The device role for voice is under development.", "ASSISTANT ACCESS"],
+  ["02", "Explicit access boundaries", "Authentication, session validation, and role-based access control protect service boundaries before a device command reaches the runtime.", "TRUST BOUNDARY"],
+  ["03", "Small hardware to HA", "Run a local or small instance with Compose, including capable Pi-class homelab hardware, or use Helm and the HA profile when Kubernetes fits your operating model.", "DEPLOYMENT RANGE"],
+  ["04", "Mobile-friendly PWA today", "Use the responsive interface on a phone and install it directly from a supported browser. Native mobile and Matter support are planned.", "CONTROL SURFACE"],
+  ["05", "Realtime state without polling", "Device changes travel through the Homenavi Device Protocol over MQTT, so dashboards, automations, and connected clients react to the same live event stream.", "EVENT STREAM"],
+  ["06", "History that stays useful", "History consumers record HDP state changes for charts and queries without making the dashboard poll the device runtime for a stale answer.", "DURABLE RECORD"],
+  ["07", "Marketplace to contributor path", "Find installable integrations in the marketplace, then use the public integration template when your home needs a capability that does not exist yet.", "EXTENSIBILITY"],
+  ["08", "A shared device contract", "Adapters translate vendor-specific behavior into HDP messages, allowing the rest of Homenavi to work with a consistent model instead of a separate API for every brand.", "HDP CONTRACT"],
+] as const;
+
 export const metadata: Metadata = {
   title: "Features",
   description: "Explore Homenavi's realtime device control, dashboards, maps, automation workflows, and integration runtime.",
@@ -79,42 +90,41 @@ export default function FeaturesPage() {
         </div>
       </section>
 
+      <section className="section feature-pairing reveal" aria-labelledby="pairing-title">
+        <div>
+          <p className="eyebrow">Easy pairing flows</p>
+          <h2 id="pairing-title">Pair, place, and use the device immediately.</h2>
+          <p>Start from an integration setup surface, then keep the device useful in the home model from its first live state update.</p>
+        </div>
+        <ol>
+          <li><span>01</span><strong>Connect</strong><small>Use the integration's setup UI and validate its credential or local discovery path.</small></li>
+          <li><span>02</span><strong>Organize</strong><small>Assign rooms, tags, groups, and optional map placement while the device is fresh in context.</small></li>
+          <li><span>03</span><strong>Control</strong><small>Use the same capability model across dashboards, automations, and scoped MCP tools.</small></li>
+        </ol>
+      </section>
+
+      <section className="section feature-microservices reveal" aria-labelledby="microservices-title">
+        <div>
+          <p className="eyebrow">Modern Go microservices</p>
+          <h2 id="microservices-title">Services that scale by responsibility, not by accident.</h2>
+          <p>Go services keep the realtime device runtime, automation, history, identity, and dashboard workloads explicit. HDP over MQTT carries shared events without forcing every consumer into a shared database.</p>
+        </div>
+        <dl>
+          <div><dt>Clear ownership</dt><dd>Each service owns a focused part of the home model and communicates through contracts.</dd></div>
+          <div><dt>Realtime by default</dt><dd>HDP events let dashboards, automations, and history react to the same device change.</dd></div>
+          <div><dt>Independent operations</dt><dd>Deploy, observe, and scale service workloads according to their actual responsibilities.</dd></div>
+        </dl>
+      </section>
+
       <section className="section feature-operating-model" aria-labelledby="operating-model-title">
         <p className="eyebrow">Operate and extend</p>
         <h2 id="operating-model-title">A control plane you can keep.</h2>
-        <div className="feature-operating-list">
-          <article>
-            <h3>MCP, scoped by design</h3>
-            <p>Connect compatible assistants with OAuth 2.1 and PKCE-scoped tools for inventory, history, device control, groups, and workflow runs. A DIY voice assistant is in development.</p>
-          </article>
-          <article>
-            <h3>Explicit access boundaries</h3>
-            <p>Authentication, session validation, and role-based access control protect service boundaries before a device command reaches the runtime.</p>
-          </article>
-          <article>
-            <h3>Small hardware to HA</h3>
-            <p>Run a local or small instance with Compose, including capable Pi-class homelab hardware, or use Helm and the HA profile when Kubernetes fits your operating model.</p>
-          </article>
-          <article>
-            <h3>Mobile-friendly PWA today</h3>
-            <p>Use the responsive interface on a phone and install it directly from a supported browser. Native mobile and Matter support are planned.</p>
-          </article>
-          <article>
-            <h3>Realtime state without polling</h3>
-            <p>Device changes travel through the Homenavi Device Protocol over MQTT, so dashboards, automations, and other connected clients react to the same live event stream.</p>
-          </article>
-          <article>
-            <h3>History that stays useful</h3>
-            <p>History consumers record HDP state changes for charts and queries without making the dashboard poll the device runtime for a stale answer.</p>
-          </article>
-          <article>
-            <h3>Marketplace to contributor path</h3>
-            <p>Find installable integrations in the marketplace, then use the public integration template when your home needs a capability that does not exist yet.</p>
-          </article>
-          <article>
-            <h3>A shared device contract</h3>
-            <p>Adapters translate vendor-specific behavior into HDP messages, allowing the rest of Homenavi to work with a consistent model instead of a separate API for every brand.</p>
-          </article>
+        <div className="feature-reveal-list">
+          {OPERATING_MODEL_ITEMS.map(([index, title, detail, label], itemIndex) => <article className={`walk-row feature-reveal-row${itemIndex % 2 ? " reverse" : ""}`} key={title}>
+            <span className="walk-index">{index}</span>
+            <div className="walk-text" data-reveal-part><p className="feature-reveal-label">{label}</p><h3>{title}</h3><p>{detail}</p></div>
+            <div className="walk-media feature-reveal-panel" data-reveal-part><span>{index}</span><strong>{label}</strong><i /></div>
+          </article>)}
         </div>
       </section>
 

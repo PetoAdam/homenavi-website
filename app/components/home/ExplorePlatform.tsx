@@ -1,4 +1,5 @@
 const destinations = [
+  { href: "/guides/mcp", label: "MCP", detail: "Connect an assistant with scoped OAuth access to Homenavi." },
   { href: "/features", label: "Features", detail: "Device control, dashboards, maps, and automation." },
   { href: "/marketplace", label: "Marketplace", detail: "Browse integration releases and capability metadata." },
   { href: "/integrations", label: "Integrations", detail: "See how external services extend the platform." },
@@ -20,11 +21,11 @@ export default function ExplorePlatform() {
           <span>Open the evaluation experience or browse the dashboard, device, and automation screens.</span>
           <a className="btn primary" href="/demo">Open demo</a>
         </article>
-        <article className="explore-feature explore-feature-mcp">
-          <p>MODEL CONTEXT PROTOCOL</p>
-          <h3>Connect an assistant without surrendering control.</h3>
-          <span>Scoped OAuth 2.1 access for inventory, device control, and workflow operations.</span>
-          <a className="btn secondary" href="/guides/mcp">Read the MCP guide</a>
+        <article className="explore-feature explore-feature-deploy">
+          <p>DEPLOY IT YOURSELF</p>
+          <h3>Start with the hardware and control boundary you already have.</h3>
+          <span>Answer a few practical questions, compare supported paths, and follow verified Compose or Helm steps.</span>
+          <a className="btn secondary" href="/deploy">Find your deployment</a>
         </article>
       </div>
       <nav className="explore-links" aria-label="Explore Homenavi">

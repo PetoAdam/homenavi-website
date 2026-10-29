@@ -24,6 +24,7 @@ export default function Footer() {
           <h4>Docs</h4>
           <ul>
             <li><a href="/guides/quickstart">Quickstart</a></li>
+            <li><a href="/deploy">Deployment guide</a></li>
             <li><a href="/guides/self-hosting">Self-hosting</a></li>
             <li><a href="/guides/automations">Automations</a></li>
             <li><a href="/guides/mcp">MCP</a></li>

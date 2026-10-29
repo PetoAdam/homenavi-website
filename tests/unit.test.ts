@@ -2,6 +2,7 @@ import { describe, it, expect } from "vitest";
 import { normalize, capabilities, Integration } from "../lib/marketplace";
 import { loadGuide, listGuides, GUIDE_SLUGS, renderGuideMarkdown } from "../lib/guides";
 import { DEMO_URL } from "../lib/demo";
+import { DEFAULT_ANSWERS, getRecommendation, chooseProfile, renderSetupPlanMarkdown } from "../lib/deployment";
 
 describe("marketplace normalize", () => {
   it("returns an empty array for null/undefined input", () => {
@@ -90,6 +91,7 @@ describe("guides", () => {
   it("exposes the planned guide slugs", () => {
     expect([...GUIDE_SLUGS]).toEqual([
       "quickstart",
+      "deployment",
       "self-hosting",
       "integration-setup",
       "automations",
@@ -121,6 +123,62 @@ describe("guides", () => {
     const rendered = renderGuideMarkdown("# Safe guide\n\n<script>alert('xss')</script>\n\n## Overview");
     expect(rendered.html).not.toContain("<script");
     expect(rendered.sections).toEqual([{ text: "Overview", id: "overview" }]);
+  });
+});
+
+describe("deployment recommendations", () => {
+  it("reuses an existing local server for the self-hosted path", () => {
+    const recommendation = getRecommendation(DEFAULT_ANSWERS);
+    expect(recommendation.profile.id).toBe("compose");
+    expect(recommendation.requiredHardware.join(" ")).toContain("selected existing host");
+    expect(recommendation.requiredHardware.join(" ")).not.toContain("buy");
+  });
+
+  it("does not require a separate gateway for hybrid hosting", () => {
+    const recommendation = getRecommendation({ ...DEFAULT_ANSWERS, hosting: "hybrid" });
+    expect(recommendation.profile.id).toBe("hybrid");
+    expect(recommendation.requiredHardware.join(" ")).toContain("optional");
+  });
+
+  it("includes the coordinator and supported integration path for Zigbee", () => {
+    const recommendation = getRecommendation({ ...DEFAULT_ANSWERS, connectivity: ["zigbee"] });
+    expect(recommendation.requiredHardware.join(" ")).toContain("Zigbee coordinator");
+    expect(recommendation.services.join(" ")).toContain("Zigbee2MQTT");
+    expect(recommendation.hardwareRecommendations.find((item) => item.name === "Compatible Zigbee coordinator")?.reason).toContain("Prefer Ethernet or Wi-Fi coordinators over USB");
+    expect(recommendation.hardwareRecommendations.find((item) => item.name === "Compatible Zigbee coordinator")?.reason).toContain("SLZB-MR3U");
+    expect(recommendation.hardwareRecommendations.find((item) => item.role === "Topology")?.name).toBe("No separate edge node for a local deployment");
+  });
+
+  it("does not present Thread as a complete Matter installation", () => {
+    const recommendation = getRecommendation({ ...DEFAULT_ANSWERS, connectivity: ["matter-thread"] });
+    expect(recommendation.limitations.join(" ")).toContain("not a complete Matter controller");
+    expect(recommendation.limitations.join(" ")).toContain("no validated Thread Border Router");
+  });
+
+  it("explains additional local compute for offline voice", () => {
+    const recommendation = getRecommendation({ ...DEFAULT_ANSWERS, voice: "offline" });
+    expect(recommendation.optionalHardware.join(" ")).toContain("CPU, memory, storage");
+  });
+
+  it("offers advanced homelab as a standard hosting option", () => {
+    expect(chooseProfile({ ...DEFAULT_ANSWERS, hosting: "homelab" }).id).toBe("kubernetes");
+  });
+
+  it("uses the mock-adapter profile for a local tryout", () => {
+    const recommendation = getRecommendation({ ...DEFAULT_ANSWERS, hosting: "tryout", hardware: "none", connectivity: ["unsure"] });
+    expect(recommendation.profile.id).toBe("tryout");
+    expect(recommendation.services.join(" ")).toContain("Mock adapter");
+    expect(recommendation.walkthrough.map((item) => item.command).join(" ")).toContain("--profile mock-adapter up -d");
+  });
+
+  it("renders the selected plan as reusable Markdown", () => {
+    const markdown = renderSetupPlanMarkdown({ ...DEFAULT_ANSWERS, connectivity: ["zigbee"] });
+    expect(markdown).toContain("# Homenavi setup plan");
+    expect(markdown).toContain("Compatible Zigbee coordinator");
+    expect(markdown).toContain("Optional remote access");
+    expect(markdown).toContain("Cloudflare Tunnel");
+    expect(markdown).toContain("Core compute");
+    expect(markdown).toContain("docker compose up -d");
   });
 });
 

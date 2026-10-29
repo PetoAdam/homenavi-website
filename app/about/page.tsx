@@ -98,7 +98,7 @@ export default function AboutPage() {
               you can try the platform without any hardware.
             </p>
             <div className="hero-cta">
-              <a className="btn secondary" href="/guides/self-hosting">Self-hosting guide</a>
+              <a className="btn secondary" href="/deploy">Plan your deployment</a>
             </div>
           </div>
           <ScreenshotFrame src="/screenshots/dashboard.png" alt="Self-hosted Homenavi dashboard" />

@@ -105,8 +105,8 @@ const WALKTHROUGH: WalkthroughStep[] = [
     route: "COMPOSE → HELM → HA PROFILE",
     title: "Deploy for the home you run.",
     description: "Start with Docker Compose for a local or small instance, or use Helm and the HA profile when Kubernetes fits your operating model. ARM64 support makes capable Pi-class homelab hardware a documented option.",
-    href: "/guides/self-hosting",
-    linkLabel: "Compare deployment paths",
+    href: "/deploy",
+    linkLabel: "Plan your deployment",
     visual: "deployment",
     reverse: true,
   },
@@ -143,6 +143,7 @@ export default async function HomePage() {
             <div className="hero-actions">
               <a className="btn primary" href="/demo">Explore the demo</a>
               <a className="btn secondary" href="/features">See the platform</a>
+              <a className="btn secondary" href="/deploy">Find your deployment</a>
             </div>
           </div>
         </header>

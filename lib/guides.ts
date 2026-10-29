@@ -6,6 +6,7 @@ const GUIDES_DIR = path.join(process.cwd(), "content", "guides");
 
 export const GUIDE_SLUGS = [
   "quickstart",
+  "deployment",
   "self-hosting",
   "integration-setup",
   "automations",
